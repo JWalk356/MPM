@@ -1,0 +1,28 @@
+# 1. load the data
+
+post16 <-read.csv(file.choose(), header = TRUE)
+
+# 2. filter and make quintiles
+
+library(dplyr)
+
+post16_clean <- post16 %>%
+  # Step 1: Filter out unwanted values
+  filter(!Average.Attainment.Point.Score.A.level %in% c("", "SUPP", "NE")) %>%
+  
+  # Step 2: Convert to numeric
+  mutate(Average.Attainment.Point.Score.A.level = as.numeric(Average.Attainment.Point.Score.A.level)) %>%
+  
+  # Step 3: Create quintiles A–E
+  mutate(
+    Quintile = ntile(Average.Attainment.Point.Score.A.level, 5),   # divides into 5 groups
+    Quintile = recode(Quintile,
+                      `1` = "A",
+                      `2` = "B",
+                      `3` = "C",
+                      `4` = "D",
+                      `5` = "E")
+  )
+
+
+write.csv(post16, "C:\Users\mfbx4jwn\OneDrive - The University of Manchester\M&E Officer\MPM\MPM 2025")
