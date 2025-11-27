@@ -25,4 +25,4 @@ post16_clean <- post16 %>%
   )
 
 
-write.csv(post16, "C:\Users\mfbx4jwn\OneDrive - The University of Manchester\M&E Officer\MPM\MPM 2025")
+write.csv(post16, "C:\\Users\\mfbx4jwn\OneDrive - The University of Manchester\\M&E Officer\\MPM\\MPM 2025\\Post16_clean.csv")
