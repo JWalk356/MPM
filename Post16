@@ -2,27 +2,41 @@
 
 post16 <-read.csv(file.choose(), header = TRUE)
 
-# 2. filter and make quintiles
-
 library(dplyr)
 
+# Define the list of establishment types to remove
+exclude_types <- c(
+  "Community special school",
+  "City technology college",
+  "Academy special sponsor led",
+  "Non-maintained special school",
+  "Free schools special",
+  "University technical college",
+  "Studio schools",
+  "Pupil referral unit",
+  "Free schools alternative provision"
+)
+
 post16_clean <- post16 %>%
-  # Step 1: Filter out unwanted values
-  filter(!Average.Attainment.Point.Score.A.level %in% c("", "SUPP", "NE")) %>%
+  # 1. Remove rows with empty string in Eligible.for.Free.School.Meals
+  filter(Eligible.for.Free.School.Meals != "") %>%
   
-  # Step 2: Convert to numeric
-  mutate(Average.Attainment.Point.Score.A.level = as.numeric(Average.Attainment.Point.Score.A.level)) %>%
+  # 2. Remove rows with blank Type.of.Establishment
+  filter(Type.of.Establishment != "") %>%
   
-  # Step 3: Create quintiles A–E
-  mutate(
-    Quintile = ntile(Average.Attainment.Point.Score.A.level, 5),   # divides into 5 groups
-    Quintile = recode(Quintile,
-                      `1` = "A",
-                      `2` = "B",
-                      `3` = "C",
-                      `4` = "D",
-                      `5` = "E")
-  )
+  # 3. Remove rows where Type.of.Establishment matches excluded values
+  filter(!Type.of.Establishment %in% exclude_types) %>%
+  
+  # 4. Convert Eligible.for.Free.School.Meals to numeric
+  mutate(Eligible.for.Free.School.Meals = as.numeric(Eligible.for.Free.School.Meals)) %>%
+  
+  # 5. Create quintile column (1 = highest, 5 = lowest)
+  mutate(quintile = ntile(desc(Eligible.for.Free.School.Meals), 5))
 
 
-write.csv(post16, "C:\\Users\\mfbx4jwn\OneDrive - The University of Manchester\\M&E Officer\\MPM\\MPM 2025\\Post16_clean.csv")
+write.csv(post16_clean,
+          "C:\\Users\\mfbx4jwn\\OneDrive - The University of Manchester\\M&E Officer\\MPM\\MPM 2025\\Post16_FSM.csv",
+          row.names = FALSE)
+
+
+
