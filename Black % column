@@ -1,0 +1,3 @@
+primary_black <- primary %>%
+#filter non-numerical values
+  filter(!(Black.. %in% c("SUPP", "NA")))
