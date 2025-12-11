@@ -1,3 +1,9 @@
 primary_black <- primary %>%
 #filter non-numerical values
   filter(!(Black.. %in% c("SUPP", "NA")))
+
+#convert to numeric
+mutate(Black.. = as.numeric(Black..)) %>%
+
+ #create quintile column (1 = highest, 5 = lowest)
+  mutate(quintile = ntile(desc(Black..), 5))
