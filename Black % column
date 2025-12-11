@@ -7,3 +7,7 @@ mutate(Black.. = as.numeric(Black..)) %>%
 
  #create quintile column (1 = highest, 5 = lowest)
   mutate(quintile = ntile(desc(Black..), 5))
+
+write.csv(primary_black,
+          "C:\\Users\\mfbx4jwn\\OneDrive - The University of Manchester\\M&E Officer\\MPM\\MPM 2025\\primary_black.csv",
+          row.names = FALSE)
